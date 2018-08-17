@@ -3,24 +3,24 @@
 import { GraphQLResolveInfo } from 'graphql';
 
 export type Resolver<Result, Parent = any, Context = any, Args = any> = (
-  parent: Parent,
-  args: Args,
-  context: Context,
-  info: GraphQLResolveInfo
+  parent?: Parent,
+  args?: Args,
+  context?: Context,
+  info?: GraphQLResolveInfo
 ) => Promise<Result> | Result;
 
 export type SubscriptionResolver<Result, Parent = any, Context = any, Args = any> = {
   subscribe<R = Result, P = Parent>(
-    parent: P,
-    args: Args,
-    context: Context,
-    info: GraphQLResolveInfo
+    parent?: P,
+    args?: Args,
+    context?: Context,
+    info?: GraphQLResolveInfo
   ): AsyncIterator<R | Result>;
   resolve?<R = Result, P = Parent>(
-    parent: P,
-    args: Args,
-    context: Context,
-    info: GraphQLResolveInfo
+    parent?: P,
+    args?: Args,
+    context?: Context,
+    info?: GraphQLResolveInfo
   ): R | Result | Promise<R | Result>;
 }
 
@@ -30,7 +30,7 @@ export type SubscriptionResolver<Result, Parent = any, Context = any, Args = any
 {{#each scalars}}
 
 {{ toComment description }}
-{{#ifCond (toPascalCase name) "!==" (getScalarType name) }}export type {{ toPascalCase name }} = {{ getScalarType name }};{{/ifCond}}
+{{#ifCond (toPascalCase name) "!==" (getScalarType name) }}export type {{ name }} = {{ getScalarType name }};{{/ifCond}}
 {{/each}}
 {{#each interfaces}}
   {{~> type }}
@@ -47,7 +47,7 @@ export type SubscriptionResolver<Result, Parent = any, Context = any, Args = any
 {{~#each types}}
   {{~#each fields}}
     {{~# if hasArguments }}
-export interface {{ toPascalCase name }}{{ toPascalCase ../name }}Args {
+export interface {{ toPascalCase name }}{{ name }}Args {
 {{#each arguments}}
   {{ name }}{{ getOptionals this }}: {{ convertedType this }}; {{ toComment description }}
 {{/each}}
@@ -60,7 +60,7 @@ export interface {{ toPascalCase name }}{{ toPascalCase ../name }}Args {
 {{/each}}
 {{#each unions}}
 {{ toComment description }}
-export type {{ toPascalCase name }} = {{#each possibleTypes}}{{ toPascalCase this}}{{#unless @last}} | {{/unless}}{{/each}};
+export type {{ name }} = {{#each possibleTypes}}{{ toPascalCase this}}{{#unless @last}} | {{/unless}}{{/each}};
 
 {{/each}}
 {{#if @root.config.schemaNamespace ~}} } {{~/if}}

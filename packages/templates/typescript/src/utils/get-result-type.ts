@@ -1,12 +1,10 @@
-import { pascalCase } from 'change-case';
+// import { pascalCase } from 'change-case';
 
 export function getResultType(type, options) {
   const baseType = type.type;
-  const underscorePrefix = type.type.match(/^[\_]+/) || '';
   const config = options.data.root.config || {};
   const realType =
-    options.data.root.primitives[baseType] ||
-    `${type.isScalar ? '' : config.interfacePrefix || ''}${underscorePrefix + pascalCase(baseType)}`;
+    options.data.root.primitivesMap[baseType] || `${type.isScalar ? '' : config.interfacePrefix || ''}${baseType}`;
   const useImmutable = !!config.immutableTypes;
 
   if (type.isArray) {
